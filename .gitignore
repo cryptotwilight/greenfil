@@ -51,17 +51,6 @@ ui/docs/css/shCoreDefault.css
 ui/docs/css/docs.min.css
 ui/docs/css/bootstrap.min.css
 ui/docs/css/animate.min.css
-ui/build/js/custom.min.js
-ui/build/js/custom.js
-ui/build/images/loading.gif
-ui/build/images/forward_enabled_hover.png
-ui/build/images/forward_enabled.png
-ui/build/images/forward_disabled.png
-ui/build/images/back_enabled_hover.png
-ui/build/images/back_enabled.png
-ui/build/images/back_disabled.png
-ui/build/css/custom.min.css
-ui/build/css/custom.css
 ui/README.md
 ui/README_CN.md
 ui/src/js/custom.js
