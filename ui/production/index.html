@@ -29,6 +29,11 @@
 
     <!-- Custom Theme Style -->
     <link href="build/css/custom.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/ipfs-http-client-lite/dist/index.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ethjs@0.3.4/dist/ethjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 
 <body class="nav-md">
@@ -91,6 +96,9 @@
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a class="btn btn-light rounded" id="connect_web_3">Connect Web 3</a>                      
                             </li>
+                            <li class="nav-item dropdown open" style="padding-left: 15px;">
+                              <span id="show_wallet"></span>
+                            </li>
 
                     
                         </ul>
@@ -109,8 +117,8 @@
                             <div class="count"><span id="total_green_nodes"></span></div>
                         </div>
                         <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-clock-o"></i> Average Identified Green Purchase</span>
-                            <div class="count"><span id="average_identified_green_nodes"></span></div>
+                            <span class="count_top"><i class="fa fa-clock-o"></i> Total Identified Green Purchase</span>
+                            <div class="count"><span id="total_identified_green_nodes"></span></div>
                         </div>
                         <div class="col-md-2 col-sm-4  tile_stats_count">
                             <span class="count_top"><i class="fa fa-user"></i> Total Unknown Green Nodes</span>
@@ -146,7 +154,8 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <h4>App Usage across versions</h4>
+                                <h4>Green Node Contract Purchases By Country</h4>
+                                <span id="contract_purchases_by_country"></span>
                                 <div class="widget_summary">
                                     <div class="w_left w_25">
                                         <span>0.1.5.2</span>
@@ -163,7 +172,6 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-
                                 <div class="widget_summary">
                                     <div class="w_left w_25">
                                         <span>0.1.5.3</span>
@@ -248,36 +256,36 @@
                                         </th>
                                         <th>
                                             <div class="col-lg-7 col-md-7 col-sm-7 ">
-                                                <p class="">Device</p>
+                                                <p class="">Renewable Energy Source</p>
                                             </div>
                                             <div class="col-lg-5 col-md-5 col-sm-5 ">
-                                                <p class="">Progress</p>
+                                                <p class="">Percentage Usage</p>
                                             </div>
                                         </th>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <canvas class="canvasDoughnut" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
+                                            <canvas id="" class="canvasDoughnut" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
                                         </td>
                                         <td>
-                                            <table class="tile_info">
+                                            <table class="tile_info" id="renewable_energy_source_usage">
                                                 <tr>
                                                     <td>
-                                                        <p><i class="fa fa-square blue"></i>IOS </p>
+                                                        <p><i class="fa fa-square #F0F8FF"></i>IOS </p>
                                                     </td>
-                                                    <td>30%</td>
+                                                    <td>15%</td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <p><i class="fa fa-square green"></i>Android </p>
                                                     </td>
-                                                    <td>10%</td>
+                                                    <td>5%</td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <p><i class="fa fa-square purple"></i>Blackberry </p>
                                                     </td>
-                                                    <td>20%</td>
+                                                    <td>40%</td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -303,28 +311,15 @@
                     <div class="col-md-4 col-sm-4 ">
                         <div class="x_panel tile fixed_height_320">
                             <div class="x_title">
-                                <h2>Quick View</h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
+                                <h2>Renewable Energy Source Contribution (MwH)</h2>
+                  
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
                                 <div class="dashboard-widget-content">
-                                    <ul class="quick-list">
-                                    
-                                      
-                                    </ul>
+                                    <table id="renewable_energy_source_contribution">
+
+                                    </table>
 
                                     <div class="sidebar-widget">
                                         <h4>Known Green SPs</h4>
@@ -357,39 +352,38 @@
                                     <div class="form-group row">
                                         <label class="control-label col-md-3 col-sm-3 ">Geography</label>
                                         <div class="col-md-9 col-sm-9 ">
-                                            <select class="form-control">
-													<option>Choose option</option>
-													<option>Option one</option>
-													<option>Option two</option>
-													<option>Option three</option>
-													<option>Option four</option>
-												</select>
+                                            <select id="available_geographies"class="form-control">
+                                              <option>Choose option</option>
+                                              <option>Option one</option>
+                                              <option>Option two</option>
+                                              <option>Option three</option>
+                                              <option>Option four</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="control-label col-md-3 col-sm-3 ">Green Energy Type</label>
+                                        <label id="available_energy_types" class="control-label col-md-3 col-sm-3 ">Green Energy Type</label>
                                         <div class="col-md-9 col-sm-9 ">
                                             <select class="form-control">
-													<option>Choose option</option>
-													<option>Option one</option>
-													<option>Option two</option>
-													<option>Option three</option>
-													<option>Option four</option>
-												</select>
+                                              <option>Choose option</option>
+                                              <option>Option one</option>
+                                              <option>Option two</option>
+                                              <option>Option three</option>
+                                              <option>Option four</option>
+                                            </select>
                                         </div>
                                     </div>
 
                                     <div class="checkbox">
                                         <label>
-                        <input type="checkbox" value=""> Green with purchases only
+                        <input id="green_with_purchases_only" type="checkbox" value=""> Green with purchases only
                       </label>
                                     </div>
                                     <div class="ln_solid"></div>
                                     <div class="form-group">
-                                        <div class="col-md-9 col-sm-9  offset-md-3">
-                                            <button type="button" class="btn btn-primary">Cancel</button>
-                                            <button type="reset" class="btn btn-primary">Reset</button>
-                                            <button type="submit" class="btn btn-success">Submit</button>
+                                        <div class="col-md-9 col-sm-9  offset-md-3">                                            
+                                            <button id="reset_search" type="reset" class="btn btn-primary">Reset</button>
+                                            <button id="search_for_nodes" type="submit" class="btn btn-success">Search</button>
                                         </div>
                                     </div>
 
@@ -414,9 +408,8 @@
                                     <div class="x_content">
                                         <div class="dashboard-widget-content">
                                             <div class="col-md-4 hidden-small">
-                                                <h2 class="line_30">125.7k Views from 60 countries</h2>
-
-                                                <table class="countries_list">
+                                                <h2 class="line_30">Country Percentage Contribution</h2>
+                                                <table id="green_node_concentration_by_location_table" class="countries_list">
                                                     <tbody>
                                                         <tr>
                                                             <td>United States</td>
@@ -455,38 +448,24 @@
                     <div class="col-md-12 col-sm-12  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Green SP Results <small>Custom design</small></h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
+                                <h2>Green SP Search Results </h2>
                                 <div class="clearfix"></div>
                             </div>
 
                             <div class="x_content">
 
-                                <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>
-
                                 <div class="table-responsive">
-                                    <table class="table table-striped jambo_table bulk_action">
+                                    <table id="green_sp_search_results_table" class="table table-striped jambo_table bulk_action">
                                         <thead>
                                             <tr class="headings">
                                                 <th class="column-title">Node </th>
                                                 <th class="column-title">Geography </th>
-                                                <th class="column-title">Purchase Count </th>
+                                                <th class="column-title">Purchase Count</th>
                                                 <th class="column-title">Energy Sources</th>
+                                                <th class="column-title">Open (Full Amount - All Contracts)</th>
+                                                <th class="column-title">Open (Delivered - All Contracts)</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
                                             <tr class="even pointer">
 
@@ -494,8 +473,9 @@
                                                 <td class=" ">May 23, 2014 11:47:56 PM </td>
                                                 <td class=" ">121000210 <i class="success fa fa-long-arrow-up"></i></td>
                                                 <td class=" ">John Blank L</td>
-
-                                                </td>
+                                                <td class=" ">121000040</td>
+                                                <td class=" ">121000040</td>
+                                                
                                             </tr>
                                             <tr class="odd pointer">
 
@@ -503,8 +483,8 @@
                                                 <td class=" ">May 23, 2014 11:30:12 PM</td>
                                                 <td class=" ">121000208 <i class="success fa fa-long-arrow-up"></i></td>
                                                 <td class=" ">John Blank L</td>
-
-                                                </td>
+                                                <td class=" ">121000040</td>
+                                                <td class=" ">121000040</td>
                                             </tr>
                                             <tr class="even pointer">
 
@@ -513,8 +493,8 @@
                                                 <td class=" ">121000203 <i class="success fa fa-long-arrow-up"></i>
                                                 </td>
                                                 <td class=" ">Mike Smith</td>
-
-                                                </td>
+                                                <td class=" ">121000040</td>
+                                                <td class=" ">121000040</td>
                                             </tr>
                                             <tr class="odd pointer">
 
@@ -522,8 +502,8 @@
                                                 <td class=" ">May 24, 2014 10:52:44 PM</td>
                                                 <td class=" ">121000204</td>
                                                 <td class=" ">Mike Smith</td>
-
-                                                </td>
+                                                <td class=" ">121000040</td>
+                                                <td class=" ">121000040</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -550,8 +530,219 @@
 
     <!--JS-->
     <script>
-    </script>
 
+      const totalGreenNodes                   = ge("total_green_nodes");
+      const totalIdentifiedGreenNodes         = ge("total_identified_green_nodes");
+      const totalUnknownGreenNodes            = ge("total_unknown_green_nodes");
+      const totalZeroPurchaseNodes            = ge("total_zero_purchase_nodes");
+      const totalUniqueSellers                = ge("total_unique_sellers");
+      const totalCountries                    = ge("total_countries");
+
+      const contractPurchasesByCountry        = ge("contract_purchases_by_country");
+
+      const renewableEnergySourceUsage        = ge("renewable_energy_source_usage");
+    
+      const renewableEnergySourceContribution = ge("renewable_energy_source_contribution");
+
+      const searchAvailableGeographies        = ge("available_geographies");
+      const searchGreenEnergyTypes             = ge("available_energy_types");
+      const searchGreentWithPurchasesOnly     = ge("green_with_purchases_only");
+
+      const resetSearchButton                        = ge("reset_search");
+      const searchForNodesButton                     = ge("search_for_nodes");
+      searchForNodesButton.addEventListener("click", searchForNodes);
+
+      const greenNodeConcentrationByLocationTable    = ge("green_node_concentration_by_location_table");
+
+      const greenSPSearchResultsTable = ge("green_sp_search_results_table");
+
+
+      function buildPurchasesByCountry(countries, totalPurchases, totalAllPurchases ){
+        contractPurchasesByCountry.innerHTML = ""; 
+        
+        for(var x = 0; x < countries.length; x++) {
+          var country = coutries[x];
+          var purchaseCount = totalPurchases[x];
+          var percentage = (purchaseCount/totalAllPurchases) * 100; 
+          
+          var d = ce("div");
+          d.setAttribute("class", "widget_summary");
+          var dd = ce("div");
+          dd.setAttribute("class", "w_left w_25");
+          d.append(dd);
+          var s = ce("span");
+          s.append(text(country));
+          dd.append(s);
+
+          var ddd = ce("div");
+          ddd.setAttribute("w_center w_55");
+          var dddd = ce("div");
+          dddd.setAttribute("class","progress");
+          ddd.append(dddd);
+          var ddddd = ce("div");
+          ddddd.setAttribute("class","progress-bar bg-green");
+          ddddd.setAttribute("role", "progressbar");
+          ddddd.setAttribute("aria-valuenow",percentage+"");
+          ddddd.setAttribute("aria-valuemin",0+"");
+          ddddd.setAttribute("aria-valuemax",100+"");
+          ddddd.setAttribute("style","width: "+percentage+"%;");
+          var ss = ce("span");
+          ss.setAttribute("class", "sr-only");
+          ss.append(text(percentage + "%"));
+          ddddd.append(ss);
+          d.append(ddddd);
+          
+          var c = ce("div");
+          c.setAttribute("class", "w_right w_20");
+          var sc = ce("span");
+          sc.append(text(purchaseCount+""));
+          c.append(sc);
+
+          var dddddd = ce("div");
+          dddddd.setAttribute("class", "clearfix");
+          d.append(dddddd);
+          contractPurchasesByCountry.append(d);
+        }
+      }
+
+      var colors = ['#F0F8FF', 'FAEBD7','','','','','','','','','','','','','','','','','','','','','','','']
+      
+      function buildRenewableEnergySourceUsageTable(sources, percentageUsage) {
+        var colourCounter = 0;  
+        renewableEnergySourceUsage.innerHTML = "";
+        for(var x = 0; x < sources.length; x++){
+          var src = sourcces[x];
+          var pcu = percentageUsage[x];
+
+          var tr = renewableEnergySourceContribution.insertRow(); 
+          var srcCell = tr.insertCell(); 
+          var p = ce("p");
+          srcCell.append(p);
+          var i = ce("i");
+          i.setAttribute("class", "fa fa-square "+color);
+          p.append(i);
+          p.append(text(src));
+          var usageCell = tr.insertCell(); 
+          usageCell.append(text(pcu + "%"));
+        }
+
+      }
+
+      function buildRenewableSourceContributionTable(sources, mwhContribution, mwhTotal) { 
+        renewableEnergySourceContribution.innerHTML = ""; 
+        for( var x = 0; x < sources.length; x++) {
+          var src = sources[x];
+          var mwh = mwhContribution[x];
+
+          var row = renewableEnergySourceContribution.insertRow(); 
+          var srcCell = row.insertCell();
+          var mwhCell = row.insertCell();
+          var mwhPercentageCell = row.insertCell();
+          
+          srcCell.append(text(src));
+          mwhCell.append(text(mwh));
+          mwhPercentageCell.append(text(((mwh/mwhTotal)*100)+"%"));
+        }
+      }
+
+      function buildSearchAvailableGeographiesSelect(geographies){
+        searchAvailableGeographies.innerHTML = ""; 
+        for(var x = 0; x < geographies.length; x++) {
+          var option = ce("option");
+          option.append(text(geographies[x]));
+          option.setAttribute("value", geographies[x]);
+          searchAvailableGeographies.append(option);
+        }
+      }
+
+      function buildSearchAvailableEnergyTypesSelect(energyTypes){
+        searchGreenEnergyTypes.innerHTML = ""; 
+        for(var x = 0; x < geographies.length; x++) {
+          var option = ce("option");
+          option.append(text(energyTypes[x]));
+          option.setAttribute("value", energyTypes[x]);
+          searchGreenEnergyTypes.append(option);
+        }
+      }
+
+      function searchForNodes() { 
+        var energyType = searchGreenEnergyTypes.value; 
+        var geography = searchAvailableGeographies.value; 
+        var greenOnly = searchGreentWithPurchasesOnly.value; 
+        console.log("searching for nodes");
+      }
+
+      function buildGreenNodeConcentrationByLocationTable(locations, nodeCounts, totalNodes) {
+        greenNodeConcentrationByLocationTable.innerHTML = ""; 
+        for(var x = 0; x < locations.length; x++) {
+            var location = locations[x];
+            var nodeCount = nodeCounts[x];
+            var percentageContribution = (nodeCount/totalNodes) * 100;
+
+            var row = greenNodeConcentrationByLocationTable.insertRow(); 
+            var locationCell = row.insertCell(); 
+            locationCell.append(text(location));
+
+            var percentageContributionCell = row.insertCell(); 
+            percentageContributionCell.setAttribute("class", "fs15 fw700 text-right");
+            percentageContributionCell.append(text(percentageContribution + "%"));
+
+        }
+      }
+
+      function buildGreenSPSearchResults(nodes, geographies, purchaseCounts, energySources, fullAmounts, deliveredAmounts) { 
+          greenSPSearchResultsTable.innerHTML = ""; 
+          var header = greenSPSearchResultsTable.insertRow(); 
+          buildGreenSPSearchResultsHeader(header);
+          for(var x = 0; x < nodes.length; x++) {
+              var node = nodes[x];
+              var geography = geographies[x];
+              var purchaseCount = purchaseCounts[x];
+              var energySources = energySources[x];
+              var fullAmount = fullAmounts[x];
+              var deliveredAmount = deliveredAmounts[x];
+
+              var row = greenSPSearchResultsTable.inertRow();
+              getCell(row).append(text(node));
+              getCell(row).append(text(geography));
+              getCell(row).append(text(purchaseCount));
+              getCell(row).append(text(energySources));
+              getCell(row).append(text(fullAmount));
+              getCell(row).append(text(deliveredAmount));
+
+          }
+      }
+
+      function getCell(row) {
+        var cell = row.insertCell();
+        cell.setAttribute("class", " " );
+        return cell; 
+      }
+
+      function buildGreenSPSearchResultsHeader(header) {
+        var headers = ['Node','Geography','Purchase Count','Energy Sources','Open (Full Amount - All Contracts)','Open (Delivered - All Contracts)'];
+        for(var x = 0; x < headers.length; x++) {
+          var h = ce("th");
+          h.setAttribute("class", "column-title");
+          h.append(text(headers[x]));
+          header.append(h);
+        }
+      }
+
+      function text(txt) {
+        return document.createTextNode(txt);
+      }
+
+      function ce(name){
+        return document.createElement(name);
+      }
+
+      function ge(id) {
+        return document.getElementById(id);
+      }
+    </script>
+    <script src="js/i_green_fil_abi.js"></script>
+    <script src="js/greenfil_connect.js"></script>
 
     <!-- jQuery -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
