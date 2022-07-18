@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/work/in_repo/greenfil/java/lib/ipfs.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java_ee_sdk-8u1/glassfish5/glassfish/lib/javaee.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/cid.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/multiaddr.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/multibase.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kunz Academy/Downloads/java-ipfs-http-client-1.3.2/java-ipfs-http-client-1.3.2/lib/multihash.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
